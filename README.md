@@ -10,21 +10,17 @@ From the [Julia website](http://julialang.org/),
 
 > Julia is a high-level, high-performance dynamic programming language for technical computing, with syntax that is familiar to users of other technical computing environments. It provides a sophisticated compiler, distributed parallel execution, numerical accuracy, and an extensive mathematical function library. The library, largely written in Julia itself, also integrates mature, best-of-breed C and Fortran libraries for linear algebra, random number generation, signal processing, and string processing. *
 
-Basically, it looks like Matlab, which is simple to learn and familiar to most MRI researchers, but it works better and faster.  In particular, for the problem of DCE MRI, Julia's simple and flexible parallel computing model allows almost perfect parallelization of the nonlinear least squares fitting problem.  In my informal testing, the basic speed of Julia coupled to my parallel implementation produced a factor of 20-40 speedup over comparable Matlab and Python.
+Basically, it looks like Matlab, which is simple to learn and familiar to most MRI researchers, but it works better and faster and is completely free.  In particular, for the problem of DCE MRI, Julia's simple and flexible parallel computing model allows almost perfect parallelization of the nonlinear least squares fitting problem.  In my informal testing, the basic speed of Julia coupled to my parallel implementation produced a factor of 20-40 speedup over comparable Matlab and Python.
 
 ## Julia Installation
 
-To run this code you must install at the bare minimum the Julia programming language.  This can
-be downloaded from [julialang.org](http://julialang.org/downloads/) as pre-compiled binaries or
-cloned from the [github repository](https://github.com/JuliaLang/julia).  If you clone the
-Julia github repo, you should be able to make it with a simple `make` command in the top-level
-source directory.  The compilation might take a while, but it is fairly automatic.
+I've tried to keep the software dependencies to a minimum.  So to run this code you must install only the Julia programming language.  Julia can be downloaded from [julialang.org](http://julialang.org/downloads/) as pre-compiled binaries or cloned from the [github repository](https://github.com/JuliaLang/julia).  If you clone the Julia github repo, you should be able to make it with a simple `make` command in the top-level source directory.  The compilation might take a while, but it is fairly automatic.
 
 Once you have the base Julia install working, go ahead and start it up.  You might need to set
 your PATH shell variable to point to your install location, or you may just be able to click on
 the icon if you installed one of the pre-compiled binaries.
 
-Next you'll need a few packagaes.  These can be installed at the Julia prompt with
+Next you'll need a few Julia packagaes.  These can be installed at the Julia prompt with
 
 - `julia> Pkg.add("MAT")`
 - `julia> Pkg.add("Optim")`
@@ -33,47 +29,15 @@ Next you'll need a few packagaes.  These can be installed at the Julia prompt wi
 
 Now you're ready to run the DCE code!
 
-## Running the In Vivo Demo.
+## Running the Code
 
-If you are not already in the DCEMRI.jl source directory, you can navigate there from within
-the Julia environment by pressing `;` to obtain the `shell>` prompt and then navigating there
-with shell commands.  After each shell command, you will need to press `;` again to drop back into the `shell>` prompt.  The semicolon acts as
-a shell command prefix.  The fancy prompt change acts as a reminder that the next text you enter will be interpreted by the shell.
-
-Once you are in the DCEMRI.jl directory, you can run the in vivo data demo with the command
-`include("demo_invivo.jl")`.  After a few seconds to a few minutes, depending on the speed of your machine, you will see the following output text:
-
+DCEMRI.jl has two basic modes of operation.  The first is command-line invocation, as you would with an operating system command.  To run DCEMRI.jl as a command, first edit the first `process_dcemri.jl` of the text file to point to your Julia binary, as in
 ```
-julia> include("demo_invivo.jl")
-importing modules
-starting workers
-reading input data
-found multi-flip data
-fitting R1 relaxation rate to multi-flip data
-fitting 6109 x 10 points on each of 3 workers
-computing signal enhancement ratios
-converting signal S to effective R1 relaxation rate
-converting effective R1 to tracer tissue concentration Ct
-fitting Standard Tofts-Kety model to tissue concentration Ct
-fitting 4337 x 25 points on each of 3 workers
-saving results to dceout.mat
+#!/path/to/julia/binary
 ```
+Next, make sure the `process_dcemri.jl` file is executable.  It should already be.
 
-## QIBA Validation
-
-To perform the validation on the Quantitative Imaging Biomarkers Alliance phantoms for yourself
-from the original DICOMS, you will need to download the DICOMS from [Daniel Barboriak's
-Lab](https://dblab.duhs.duke.edu/modules/QIBAcontent/index.php?id=1).  Then the scripts in the
-`qibav6` and `qibav9` folders will help you translate the DICOM data to MAT files suitable for
-input into the Julia code.
-
-I have already done this step for you and included the MAT files.  This can serve as a quick check that everything is installed correctly.
-
-## Running the Code on Your Data
-
-The other way to run DCEMRI.jl is from the command shell directly, without starting Julia at all.  The script can parse arguments passed in on the command line to configure the model and point to the input data and output file.
-
-If you run `./process_dcemri.jl -h` at the terminal prompt, you will get
+The script run as a command can parse arguments passed on the command line to configure the model and point to the input data and output file.  To see the available options, run `./process_dcemri.jl -h` at the terminal prompt, you will get
 ```
 usage: process_dcemri_data.jl [-O OUTFILE] [-R RELAXIVITY] [-r TR]
                         [-d DCEFLIP] [-t T1FLIP [T1FLIP...]] [-x] [-p]
@@ -110,3 +74,40 @@ optional arguments:
 
 
 ```
+
+## Running the In Vivo Demo
+
+If you are not already in the DCEMRI.jl source directory, you can navigate there from within
+the Julia environment by pressing `;` to obtain the `shell>` prompt and then navigating there
+with shell commands.  After each shell command, you will need to press `;` again to drop back into the `shell>` prompt.  The semicolon acts as
+a shell command prefix.  The fancy prompt change acts as a reminder that the next text you enter will be interpreted by the shell.
+
+Once you are in the DCEMRI.jl directory, you can run the in vivo data demo with the command
+`include("demo_invivo.jl")`.  After a few seconds to a few minutes, depending on the speed of your machine, you will see the following output text:
+
+```
+julia> include("demo_invivo.jl")
+importing modules
+starting workers
+reading input data
+found multi-flip data
+fitting R1 relaxation rate to multi-flip data
+fitting 6109 x 10 points on each of 3 workers
+computing signal enhancement ratios
+converting signal S to effective R1 relaxation rate
+converting effective R1 to tracer tissue concentration Ct
+fitting Standard Tofts-Kety model to tissue concentration Ct
+fitting 4337 x 25 points on each of 3 workers
+saving results to dceout.mat
+```
+
+## Running the QIBA Validation
+
+To perform the validation on the Quantitative Imaging Biomarkers Alliance phantoms for yourself
+from the original DICOMS, you will need to download the DICOMS from [Daniel Barboriak's
+Lab](https://dblab.duhs.duke.edu/modules/QIBAcontent/index.php?id=1).  Then the scripts in the
+`qibav6` and `qibav9` folders will help you translate the DICOM data to MAT files suitable for
+input into the Julia code.
+
+I have already done this step for you and included the MAT files.  This can serve as a quick check that everything is installed correctly.
+
