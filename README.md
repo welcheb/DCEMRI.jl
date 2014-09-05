@@ -2,7 +2,15 @@ DCEMRI.jl
 =========
 
 Julia language tools for the analysis of dynamic contrast enhanced magnetic resonance imaging
-(DCE MRI) data
+(DCE MRI) data.
+
+## Why Julia?
+
+From the [Julia website](http://julialang.org/),
+
+> Julia is a high-level, high-performance dynamic programming language for technical computing, with syntax that is familiar to users of other technical computing environments. It provides a sophisticated compiler, distributed parallel execution, numerical accuracy, and an extensive mathematical function library. The library, largely written in Julia itself, also integrates mature, best-of-breed C and Fortran libraries for linear algebra, random number generation, signal processing, and string processing. *
+
+Basically, it looks like Matlab, which is simple to learn and familiar to most MRI researchers, but it works better and faster.  In particular, for the problem of DCE MRI, Julia's simple and flexible parallel computing model allows almost perfect parallelization of the nonlinear least squares fitting problem.  In my informal testing, the basic speed of Julia coupled to my parallel implementation produced a factor of 20-40 speedup over comparable Matlab and Python.
 
 ## Julia Installation
 
