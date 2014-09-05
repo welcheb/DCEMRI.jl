@@ -74,7 +74,7 @@ usage: process_dcemri_data.jl [-O OUTFILE] [-R RELAXIVITY] [-r TR]
 Process DCE-MRI data. Optional arguments can be used to override any
 values found in input files. For questions, contact David Smith
 <david.smith@gmail.com>. For bug reports and feature requests, file an
-issue at http://github.com/davidssmith/JuliaDCE
+issue at http://github.com/davidssmith/DCEMRI.jl
 
 positional arguments:
   datafile              path to MAT file containing DCE and T1 data
