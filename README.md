@@ -29,6 +29,10 @@ Next you'll need a few Julia packagaes.  These can be installed at the Julia pro
 
 Now you're ready to run the DCE code!
 
+## A Note about Units
+
+All units in the code are SI where possible.  Sometimes, due to numerical accuracy issues, they have been converted internally. But all data should be supplied to the code in SI units.  In particular, time should be in seconds, and relaxation rates in inverse seconds.  Flip angles should be in degrees.
+
 ## Running the Code
 
 DCEMRI.jl has two basic modes of operation.  The first is command-line invocation, as you would with an operating system command.  To run DCEMRI.jl as a command, first edit the first `process_dcemri.jl` of the text file to point to your Julia binary, as in
@@ -74,6 +78,17 @@ optional arguments:
 
 
 ```
+
+To process a DCEMRI data set from the command line, the minimum invocation is
+`./process_dcemri.jl /path/to/my/dce/data.mat`.
+
+The input data MAT file must contain the following:
+- `aif`: Arterial input function (Cp) as a vector, resampled to the DCE time points.
+- `dcedata`: DCE data as a 3-D array (1 time by 2 space dimensions).
+- `t`: time vector representing the dcedata samples.
+- T1 information as either `R1map` and `S0map`, representing pre-calculated R1 relaxation maps, or as `t1data`, indicating that
+a multi-flip scan was performed and must be analyzed.  If `t1data` is supplied, the code also needs `t1flip`, a vector of flip angles for the multi-flip data.
+
 
 ## Running the In Vivo Demo
 
