@@ -35,15 +35,15 @@ All units in the code are SI where possible.  Sometimes, due to numerical accura
 
 ## Running the Code
 
-DCEMRI.jl has two basic modes of operation.  The first is command-line invocation, as you would with an operating system command.  To run DCEMRI.jl as a command, first edit the first `process_dcemri.jl` of the text file to point to your Julia binary, as in
+DCEMRI.jl has two basic modes of operation.  The first is command-line invocation, as you would with an operating system command.  To run DCEMRI.jl as a command, first edit the first line of `src/rundce.jl` to point to your Julia binary, as in
 ```
 #!/path/to/julia/binary
 ```
-Next, make sure the `process_dcemri.jl` file is executable.  It should already be.
+Next, make sure the `src/rundce.jl` file is executable.  It should already be.
 
-The script run as a command can parse arguments passed on the command line to configure the model and point to the input data and output file.  To see the available options, run `./process_dcemri.jl -h` at the terminal prompt, you will get
+The script run as a command can parse arguments passed on the command line to configure the model and point to the input data and output file.  To see the available options, run `./rundce.jl -h` at the terminal prompt, you will get
 ```
-usage: process_dcemri_data.jl [-O OUTFILE] [-R RELAXIVITY] [-r TR]
+usage: rundce.jl [-O OUTFILE] [-R RELAXIVITY] [-r TR]
                         [-d DCEFLIP] [-t T1FLIP [T1FLIP...]] [-x] [-p]
                         [-w WORKERS] [-v] [-h] [datafile]
 
@@ -80,13 +80,13 @@ optional arguments:
 ```
 
 To process a DCEMRI data set from the command line, the minimum invocation is
-`./process_dcemri.jl /path/to/my/dce/data.mat`.
+`./rundce.jl /path/to/my/dce/data.mat`.
 
 The input data MAT file must contain the following:
 - `aif`: Arterial input function (Cp) as a vector, resampled to the DCE time points.
 - `dcedata`: DCE data as a 3-D array (1 time by 2 space dimensions).
 - `t`: time vector representing the dcedata samples.
-- T1 information as either `R1map` and `S0map`, representing pre-calculated R1 relaxation maps, or as `t1data`, indicating that
+- R1 information as either `R1map` and `S0map`, representing pre-calculated R1 relaxation maps, or as `t1data`, indicating that
 a multi-flip scan was performed and must be analyzed.  If `t1data` is supplied, the code also needs `t1flip`, a vector of flip angles for the multi-flip data.
 
 
